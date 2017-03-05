@@ -517,7 +517,7 @@
          * @param string $query
          * @param array $parameters An array of parameters to be bound in to the query
          * @param string $connection_name Which connection to use
-		 * @param float $query_time Query time
+         * @param float $query_time Query time
          * @return bool
          */
         protected static function _log_query($query, $parameters, $connection_name, $query_time) {
@@ -1935,6 +1935,50 @@
             }
             $args = func_get_args();
             return array_intersect_key($this->_data, array_flip($args));
+        }
+
+        /*! Added by Kader Bouyakoub 2017/03/05 */
+
+        /**
+         * Return the raw data wrapped by this ORM
+         * instance as an object. Column names may
+         * optionally be supplied as arguments,
+         * if so, only those keys will be returned.
+         */
+        public function as_object() {
+            if (func_num_args() === 0) {
+                return (object) $this->_data;
+            }
+            $args = func_get_args();
+            return (object) array_intersect_key($this->_data, array_flip($args));
+        }
+
+        /**
+         * Return the raw data wrapped by this ORM
+         * instance as json object. Column names may
+         * optionally be supplied as arguments,
+         * if so, only those keys will be returned.
+         */
+        public function as_json() {
+            if (func_num_args() === 0) {
+                return json_encode($this->_data);
+            }
+            $args = func_get_args();
+            return json_encode(array_intersect_key($this->_data, array_flip($args)));
+        }
+
+        /**
+         * Return the raw data wrapped by this ORM
+         * instance as a PHP serialized string. Column names
+         * may optionally be supplied as arguments,
+         * if so, only those keys will be returned.
+         */
+        public function as_string() {
+            if (func_num_args() === 0) {
+                return serialize($this->_data);
+            }
+            $args = func_get_args();
+            return serialize(array_intersect_key($this->_data, array_flip($args)));
         }
 
         /**
